@@ -1,3 +1,4 @@
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -45,11 +46,10 @@ vector<double_list> get_initial_q_list(int num_states){
     return ret;
 }
 
-tuple<location_to_state_map_t, state_to_location_map_t, int_list> read_states_file(const string& filename){
+tuple<location_to_state_map_t, state_to_location_map_t> read_states_file(const string& filename){
     ifstream f(filename);
     location_to_state_map_t ret1;
     state_to_location_map_t ret2;
-    int_list actions;
     string temp;
     int count=0;
 
@@ -57,10 +57,9 @@ tuple<location_to_state_map_t, state_to_location_map_t, int_list> read_states_fi
         char current_state = temp.c_str()[0];
         ret1[current_state] = count;
         ret2[count] = current_state;
-        actions.push_back(count);
         count++;
     }
-    return std::make_tuple(ret1, ret2, actions);
+    return std::make_tuple(ret1, ret2);
 }
 
 void print_states(location_to_state_map_t s){
