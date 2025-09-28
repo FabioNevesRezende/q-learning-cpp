@@ -13,10 +13,11 @@ int main(int argc, char* argv[]){
     string states_file = argv[1];
     string rewards_map_file = argv[2];
     char route_init = argv[3][0];
-    char route_end = argv[4][0];
-    int epochs = stoi(string(argv[5]));
-    double alpha = stod(string(argv[6]));
-    double gamma = stod(string(argv[7]));
+    char route_priority = argv[4][0];
+    char route_end = argv[5][0];
+    int epochs = stoi(string(argv[6]));
+    double alpha = stod(string(argv[7]));
+    double gamma = stod(string(argv[8]));
 
     std::srand(std::time({})); // use current time as seed for random generator
 
@@ -31,7 +32,10 @@ int main(int argc, char* argv[]){
     vector<int_list> R = read_rewards_matrix(rewards_map_file);
 
     // update the rewards matrix to make the destination state reward higher than any other
+    // and to make the priority state a little higher so it has more chances to pass there
     int destination_state = location_to_state[route_end];
+    int priority_state = location_to_state[route_priority];
+    R[priority_state][priority_state] = 500;
     R[destination_state][destination_state] = 1000;
     
     // set the initial Q matrix filled with zeroes
