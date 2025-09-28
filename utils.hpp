@@ -24,6 +24,21 @@ typedef vector<double> double_list;
 typedef map<char, int> location_to_state_map_t;
 typedef map<int, char> state_to_location_map_t;
 
+struct params{
+    char route_init;
+    char route_priority;
+    char route_end;
+    int epochs;
+    double alpha;
+    double gamma;
+    vector<int_list> R_init; // rewards matrix read from file (initial)
+    vector<int_list> R; // rewards matrix (updated at each new route)
+    vector<double_list> Q; // Q learning matrix
+    location_to_state_map_t location_to_state;
+    state_to_location_map_t state_to_location;
+    string rewards_map_file;
+};
+
 int index_of_greatest(double_list l){
     int greatest = 0;
     int size = l.size();
@@ -46,20 +61,18 @@ vector<double_list> get_initial_q_list(int num_states){
     return ret;
 }
 
-tuple<location_to_state_map_t, state_to_location_map_t> read_states_file(const string& filename){
+void read_states_file(params* p, const string& filename){
     ifstream f(filename);
-    location_to_state_map_t ret1;
-    state_to_location_map_t ret2;
     string temp;
     int count=0;
 
     while (getline(f,temp)){
         char current_state = temp.c_str()[0];
-        ret1[current_state] = count;
-        ret2[count] = current_state;
+        p->location_to_state[current_state] = count;
+        p->state_to_location[count] = current_state;
         count++;
     }
-    return std::make_tuple(ret1, ret2);
+
 }
 
 void print_states(location_to_state_map_t s){
