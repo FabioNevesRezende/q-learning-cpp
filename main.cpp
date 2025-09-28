@@ -29,6 +29,10 @@ int main(int argc, char* argv[]){
 
     // read the rewards matrix file and create a matrix for it
     vector<int_list> R = read_rewards_matrix(rewards_map_file);
+
+    // update the rewards matrix to make the destination state reward higher than any other
+    int destination_state = location_to_state[route_end];
+    R[destination_state][destination_state] = 1000;
     
     // set the initial Q matrix filled with zeroes
     auto Q = get_initial_q_list(num_states);
